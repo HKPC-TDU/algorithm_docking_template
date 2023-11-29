@@ -1,0 +1,3 @@
+minio
+grpcio
+grpcio-health-checking
