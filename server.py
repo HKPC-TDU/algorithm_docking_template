@@ -11,6 +11,7 @@ from predict import ModelPredict
 from store import Repository
 from pathlib import Path
 from utils.file_utils import remove_directory
+from datetime import datetime
 
 
 class ModelLoadingError(Exception):
@@ -28,19 +29,29 @@ class PredictorServicer(prediction_service.PredictorServicer):
 
     def PredictorPredict(self, request, context: ServicerContext):
         try:
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'request to predict')
             contact = "###"
             data_info = request.document.split(contact)
             bucket = data_info[0]
             path = data_info[1]
-            # print(bucket+":"+path)
+            # 1. remove history request
             remove_directory(Path(self.context.inputs_path))
+            print(f'remove history request in {self.context.inputs_path}')
             remove_directory(Path(self.context.outputs_path))
-            self.repository.download_input_paths(bucket, path, self.context.inputs_path)
+            print(f'remove history result in {self.context.outputs_path}')
+            # 2. download current request
+            if self.context.is_prod():
+                self.repository.download_input_paths(bucket, path, self.context.inputs_path)
+                print(f'download request from {bucket}/{path}')
+            # 3. predict by model
             self.predict_service.predict()
-
+            # 4. upload result to minio
             minio_path = f'{path}/outputs'
-            self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_path, bucket_name=bucket,
-                                                         minio_path=minio_path)
+            if self.context.is_prod():
+                self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_path, bucket_name=bucket,
+                                                             minio_path=minio_path)
+                print(f'upload result to {bucket}/{minio_path}')
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'finish\n')
             return prediction_service_pb2.PredictorPredictResponse(
                 response=f'{bucket}{contact}{minio_path}')
         except ModelLoadingError as ex:

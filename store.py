@@ -13,12 +13,12 @@ class Repository:
         )
 
     def download_input_paths(self, bucket, path, inputs_path):
-        print('start download inputs')
+        # print('start download inputs')
         data_files = self.client.list_objects(bucket, path, recursive=True)
         for item in data_files:
             self.client.fget_object(bucket, item.object_name,
                                     "{0}/{1}".format(inputs_path, os.path.relpath(item.object_name, path)))
-        print('success to download inputs: {0}'.format(inputs_path))
+        # print('success to download inputs: {0}'.format(inputs_path))
         return inputs_path
 
     def upload_local_folder_to_minio(self, local_path, bucket_name, minio_path):

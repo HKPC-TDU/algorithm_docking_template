@@ -13,7 +13,7 @@ class TrainingConfig:
     def __str__(self) -> str:
         results = [
             "'{}' training settings".format(self.MODEL_NAME),
-            "backend service settings:",
+            "\nbackend service settings:",
             "{}={}".format("JOB_ID", self.JOB_ID),
             "{}={}".format("ALGORITHM_NAME", self.ALGORITHM_NAME),
             "{}={}".format("TRAINING_DATA_BUCKET", self.TRAINING_DATA_BUCKET),
@@ -25,11 +25,12 @@ class TrainingConfig:
             "{}={}".format("MINIO_SERVER_ACCESS_KEY", self.MINIO_SERVER_ACCESS_KEY),
             "{}={}".format("MINIO_SERVER_SECRET_KEY", self.MINIO_SERVER_SECRET_KEY),
             "{}={}".format("MODEL_BUCKET", self.MODEL_BUCKET),
-            "user settings:",
+            "\nuser settings:",
             "{}={}".format("EPOCHS", self.EPOCHS), "{}={}".format("LR", self.LR),
             "{}={}".format("BATCH_SIZE", self.BATCH_SIZE),
             "{}={}".format("FC_SIZE", self.FC_SIZE),
-            "algorithms settings:",
+            "\nalgorithms settings:",
+            "{}={}".format("ENV", self.ENV),
             "{}={}".format("MODEL_VERSION", self.MODEL_VERSION),
             "{}={}".format("MODEL_SERVING_VERSION", self.MODEL_SERVING_VERSION),
             "{}={}".format("WORLD_SIZE", self.WORLD_SIZE),
@@ -53,8 +54,8 @@ class TrainingConfig:
         self.MINIO_SERVER = os.getenv('MINIO_SERVER') or "127.0.0.1:9000"
         self.MINIO_SERVER_ACCESS_KEY = os.getenv('MINIO_SERVER_ACCESS_KEY') or "foooo"
         self.MINIO_SERVER_SECRET_KEY = os.getenv('MINIO_SERVER_SECRET_KEY') or "barbarbar"
-        self.TRAINING_DATA_BUCKET = os.getenv('TRAINING_DATA_BUCKET') or "mini-automl-dm"
-        self.TRAINING_DATA_PATH = os.getenv('TRAINING_DATA_PATH') or "versionedDatasets/1/hashDg=="
+        self.TRAINING_DATA_BUCKET = os.getenv('TRAINING_DATA_BUCKET') or "tdu-platform-dm"
+        self.TRAINING_DATA_PATH = os.getenv('TRAINING_DATA_PATH') or "datasets/20/versions-snapshots/hashAABQ"
         ######################## define in the frontend of UI ###########################
         self.EPOCHS = self.int_or_default(os.getenv('EPOCHS'), 1)
         self.LR = self.int_or_default(os.getenv('LR'), 5)
@@ -64,6 +65,7 @@ class TrainingConfig:
         self.MODEL_VERSION = "1.0"
         self.MODEL_SERVING_VERSION = os.getenv('MODEL_SERVING_VERSION') or "1.0"
         self.MODEL_OBJECT_NAME = "run100"
+        self.ENV = os.environ.get('ENV') or "dev"
         ######################## static values that haven't defined in the platform ###########################
         # distributed training related settings
         self.WORLD_SIZE = self.int_or_default(os.getenv('WORLD_SIZE'), 1)
@@ -79,7 +81,18 @@ class TrainingConfig:
 
 class PredictConfig:
 
+    def __str__(self) -> str:
+        results = [
+            "predict service settings",
+            "{}={}".format("ENV", self.ENV),
+            "{}={}".format("MINIO_SERVER", self.MINIO_SERVER),
+            "{}={}".format("MINIO_SERVER_ACCESS_KEY", self.MINIO_SERVER_ACCESS_KEY),
+            "{}={}".format("MINIO_SERVER_SECRET_KEY", self.MINIO_SERVER_SECRET_KEY),
+        ]
+        return "\n".join(results)
+
     def __init__(self):
+        self.ENV = os.environ.get('ENV') or "dev"
         # docker: minio:9000, local: 127.0.0.1:9000
         self.MINIO_SERVER = os.getenv('MINIO_SERVER') or "127.0.0.1:9000"
         self.MINIO_SERVER_ACCESS_KEY = os.getenv('MINIO_SERVER_ACCESS_KEY') or "foooo"

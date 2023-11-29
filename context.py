@@ -18,6 +18,9 @@ class TrainingContext:
     def set_task_id(self, task_id):
         self.config.JOB_ID = task_id
 
+    def is_prod(self):
+        return self.config.ENV and "PROD".__eq__(self.config.ENV.upper())
+
 
 class PredictContext:
 
@@ -25,3 +28,6 @@ class PredictContext:
         self.config = PredictConfig()
         self.inputs_path = './requests'
         self.outputs_path = './responses'
+
+    def is_prod(self):
+        return self.config.ENV and "PROD".__eq__(self.config.ENV.upper())

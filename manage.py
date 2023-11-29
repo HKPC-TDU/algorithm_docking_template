@@ -11,8 +11,8 @@ def run_script(command):
             script_name = "train_entrance"
             # subprocess.run(["python", "train_entrance.py"], check=True)
         elif command == "predict":
-            script_name = "sever"
-            # subprocess.run(["python", "sever.py"], check=True)
+            script_name = "server"
+            # subprocess.run(["python", "server.py"], check=True)
         if script_name != "":
             module = importlib.import_module(script_name)
             module.main()
@@ -27,5 +27,5 @@ if __name__ == "__main__":
         command = sys.argv[1]
         run_script(command)
     else:
-        command = os.environ.get('cmd', '')
+        command = os.environ.get('CMD', '')
         run_script(command)
