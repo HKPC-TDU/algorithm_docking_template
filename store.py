@@ -23,6 +23,7 @@ class Repository:
 
     def upload_local_folder_to_minio(self, local_path, bucket_name, minio_path):
         if not os.path.isfile(local_path):
+            # hidden files (files starting with .) will not be found when use glob.glob
             for local_file in glob.glob(local_path + '/**'):
                 local_file = local_file.replace(os.sep, "/")
                 relative_path = os.path.dirname(local_file).replace(local_path, "")

@@ -6,6 +6,7 @@ def remove_directory(start_directory: Path):
     subdirectories, and every file contained in any of those folders."""
     for path in start_directory.iterdir():
         if path.is_file():
-            path.unlink()
+            if ".gitkeep" not in path.name:
+                path.unlink()
         else:
             remove_directory(path)
