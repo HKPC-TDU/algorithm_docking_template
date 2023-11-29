@@ -47,9 +47,9 @@ conda run python train_entrance.py
 （4）验证
 检查模型输出到train_outputs文件夹
 
-## 3. 预测服务代码
+## 3. 预测服务开发
 
-### 3.1 算法代码
+### 3.1 预测服务代码
 path: predict.py
 ```predict.py
 class ModelPredict:
@@ -70,7 +70,7 @@ class ModelPredict:
 self.inputs_path 对应文件夹requests
 self.outputs_path 对应文件夹response
 
-### 3.2 本地调试模型训练
+### 3.2 本地调试预测服务
 （1）安装依赖包
 ```commandline
 # VirtualEnv
