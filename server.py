@@ -34,13 +34,13 @@ class PredictorServicer(prediction_service.PredictorServicer):
             data_info = request.document.split(contact)
             bucket = data_info[0]
             path = data_info[1]
-            # 1. remove history request
-            remove_directory(Path(self.context.inputs_path))
-            print(f'remove history request in {self.context.inputs_path}')
-            remove_directory(Path(self.context.outputs_path))
-            print(f'remove history result in {self.context.outputs_path}')
-            # 2. download current request
             if self.context.is_prod():
+                # 1. remove history request
+                remove_directory(Path(self.context.inputs_path))
+                print(f'remove history request in {self.context.inputs_path}')
+                remove_directory(Path(self.context.outputs_path))
+                print(f'remove history result in {self.context.outputs_path}')
+                # 2. download current request
                 self.repository.download_input_paths(bucket, path, self.context.inputs_path)
                 print(f'download request from {bucket}/{path}')
             # 3. predict by model

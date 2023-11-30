@@ -16,13 +16,14 @@ def main():
     # context.set_task_id("12")
     print('\n ------ ------ ----- context initial ------ ------ ----- \n')
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), context.config)
-    # 2. remove inputs and outputs
-    remove_directory(Path(context.model_inputs_path))
-    print('\n ------ ------ ----- data preparation ------ ------ ----- \n')
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history inputs in {context.model_inputs_path}')
-    remove_directory(Path(context.model_outputs_path))
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history outputs in {context.model_outputs_path}')
     if context.is_prod():
+        print('\n ------ ------ ----- data preparation ------ ------ ----- \n')
+        # 2. remove inputs and outputs
+        remove_directory(Path(context.model_inputs_path))
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history inputs in {context.model_inputs_path}')
+        remove_directory(Path(context.model_outputs_path))
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history outputs in {context.model_outputs_path}')
+
         repository = Repository(context.config.MINIO_SERVER, context.config.MINIO_SERVER_ACCESS_KEY,
                                 context.config.MINIO_SERVER_SECRET_KEY)
         # 3. download dataset
