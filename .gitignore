@@ -163,3 +163,4 @@ train_inputs/*
 train_outputs/*
 requests/*
 responses/*
+model_data/*
