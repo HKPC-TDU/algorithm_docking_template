@@ -64,7 +64,7 @@ class TrainingConfig:
         ######################## define in the algorithm side ###########################
         self.MODEL_VERSION = "1.0"
         self.MODEL_SERVING_VERSION = os.getenv('MODEL_SERVING_VERSION') or "1.0"
-        self.MODEL_OBJECT_NAME = "run100"
+        self.MODEL_OBJECT_NAME = "model"
         self.ENV = os.environ.get('ENV') or "dev"
         ######################## static values that haven't defined in the platform ###########################
         # distributed training related settings
@@ -88,6 +88,8 @@ class PredictConfig:
             "{}={}".format("MINIO_SERVER", self.MINIO_SERVER),
             "{}={}".format("MINIO_SERVER_ACCESS_KEY", self.MINIO_SERVER_ACCESS_KEY),
             "{}={}".format("MINIO_SERVER_SECRET_KEY", self.MINIO_SERVER_SECRET_KEY),
+            "{}={}".format("MODEL_BUCKET", self.MODEL_BUCKET),
+            "{}={}".format("MODEL_PATH", self.MODEL_PATH),
         ]
         return "\n".join(results)
 
@@ -97,3 +99,5 @@ class PredictConfig:
         self.MINIO_SERVER = os.getenv('MINIO_SERVER') or "127.0.0.1:9000"
         self.MINIO_SERVER_ACCESS_KEY = os.getenv('MINIO_SERVER_ACCESS_KEY') or "foooo"
         self.MINIO_SERVER_SECRET_KEY = os.getenv('MINIO_SERVER_SECRET_KEY') or "barbarbar"
+        self.MODEL_BUCKET = os.getenv('MODEL_BUCKET') or "tdu-platform-ms"
+        self.MODEL_PATH = os.getenv('MODEL_PATH') or "artifacts/intent-classification-test-0918"

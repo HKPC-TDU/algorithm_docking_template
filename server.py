@@ -36,19 +36,26 @@ class PredictorServicer(prediction_service.PredictorServicer):
             path = data_info[1]
             if self.context.is_prod():
                 # 1. remove history request
-                remove_directory(Path(self.context.inputs_path))
-                print(f'remove history request in {self.context.inputs_path}')
-                remove_directory(Path(self.context.outputs_path))
-                print(f'remove history result in {self.context.outputs_path}')
-                # 2. download current request
-                self.repository.download_input_paths(bucket, path, self.context.inputs_path)
+                remove_directory(Path(self.context.inputs_folder))
+                print(f'remove history request in {self.context.inputs_folder}')
+                remove_directory(Path(self.context.outputs_folder))
+                print(f'remove history result in {self.context.outputs_folder}')
+                # 2.1 download current request
+                self.repository.download_input_paths(bucket, path, self.context.inputs_folder)
                 print(f'download request from {bucket}/{path}')
+            # 2.2 download model
+            if self.context.model_bucket and self.context.model_path:
+                remove_directory(Path(self.context.model_folder))
+                print(f'remove history result in {self.context.model_folder}')
+                self.repository.download_input_paths(self.context.model_bucket, self.context.model_path,
+                                                     self.context.model_folder)
+                print(f'download model from {self.context.model_bucket}/{self.context.model_path}')
             # 3. predict by model
             self.predict_service.predict()
             # 4. upload result to minio
             minio_path = f'{path}/outputs'
             if self.context.is_prod():
-                self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_path, bucket_name=bucket,
+                self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_folder, bucket_name=bucket,
                                                              minio_path=minio_path)
                 print(f'upload result to {bucket}/{minio_path}')
             print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'finish\n')
@@ -63,7 +70,7 @@ def main():
     context = PredictContext()
     repository = Repository(context.config.MINIO_SERVER, context.config.MINIO_SERVER_ACCESS_KEY,
                             context.config.MINIO_SERVER_SECRET_KEY)
-    predict_model = ModelPredict(context.inputs_path, context.outputs_path)
+    predict_model = ModelPredict(context.inputs_folder, context.outputs_folder, context.model_folder)
     prediction_service.add_PredictorServicer_to_server(
         PredictorServicer(context, repository, predict_model), server)
     health_servicer = health.HealthServicer(

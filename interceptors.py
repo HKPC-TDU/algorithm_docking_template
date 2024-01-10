@@ -11,6 +11,13 @@ class TrainingInterceptor:
                                                 context.config.MODEL_VERSION,
                                                 context.config.MODEL_NAME)
 
-    def create_artifact(self):
+    def starting(self):
+        self.interceptor.log_run_start()
+
+    def failure(self):
+        self.interceptor.log_run_end(True, 'fail to complete training job.')
+
+    def success(self):
+        self.interceptor.log_run_end(True, 'success to complete training job.')
         return self.interceptor.create_artifact(self.context.model_bucket, self.context.model_path,
                                                 self.context.algorithm_name)

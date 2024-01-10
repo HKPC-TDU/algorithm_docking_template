@@ -5,25 +5,33 @@
 ## 2. 算法开发
 
 ### 2.1 算法代码
+默认训练成功，可以添加熟练失败的逻辑
+
 path: train.py
 ```train.py
 class Model:
 
-    def __init__(self, inputs_path, outputs_path):
-        self.inputs_path = inputs_path
-        self.outputs_path = outputs_path
+        def __init__(self, inputs_folder, outputs_folder, history_model_folder):
+        self.inputs_folder = inputs_folder
+        self.outputs_folder = outputs_folder
+        self.history_model_folder = history_model_folder
+        self.result = True
 
     def train(self):
-        print('load dataset from {0}'.format(self.inputs_path))
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'load dataset from {0}'.format(self.inputs_folder))
 
         # codes of algorithm
         print('training')
         # codes of algorithm
 
-        print('save model in {0}'.format(self.outputs_path))
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'save model in {0}'.format(self.outputs_folder))
+        return self.result
 ```
-self.inputs_path 对应文件夹train_inputs
-self.outputs_path 对应文件夹train_outputs
+self.inputs_folder 对应文件夹train_inputs
+
+self.outputs_folder 对应文件夹train_outputs
+
+self.history_model_folder 对应文件夹model_data
 
 ### 2.2 本地调试模型训练
 （1）安装依赖包
@@ -54,21 +62,25 @@ path: predict.py
 ```predict.py
 class ModelPredict:
 
-    def __init__(self, inputs_path, outputs_path):
-        self.inputs_path = inputs_path
-        self.outputs_path = outputs_path
+        def __init__(self, inputs_folder, outputs_folder, model_folder):
+        self.inputs_folder = inputs_folder
+        self.outputs_folder = outputs_folder
+        self.model_folder = model_folder
 
     def predict(self):
-        print('load input from {0}'.format(self.inputs_path))
+        print('load input from {0}'.format(self.inputs_folder))
 
         # codes of algorithm
         print('predict')
         # codes of algorithm
 
-        print('save result in {0}'.format(self.outputs_path))
+        print('save result in {0}'.format(self.outputs_folder))
 ```
-self.inputs_path 对应文件夹requests
-self.outputs_path 对应文件夹response
+self.inputs_folder 对应文件夹requests
+
+self.outputs_folder 对应文件夹response
+
+self.model_folder 对应文件夹model_data
 
 ### 3.2 本地调试预测服务
 （1）安装依赖包
