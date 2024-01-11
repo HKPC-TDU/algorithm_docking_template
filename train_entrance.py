@@ -3,7 +3,7 @@ from interceptors import TrainingInterceptor
 from store import Repository
 from train import Model
 from pathlib import Path
-from utils.file_utils import remove_directory
+from utils.file_utils import remove_directory, mkdir_directory
 from datetime import datetime
 
 
@@ -12,11 +12,14 @@ def main():
     context = TrainingContext()
     interceptor = TrainingInterceptor(context)
     # dataset
-    context.set_inputs("tdu-platform-dm", "datasets/20/versions-snapshots/hashAABQ")
+    # context.set_inputs("tdu-platform-dm", "datasets/20/versions-snapshots/hashAABQ")
     # create_task
-    context.set_task_id("16")
+    # context.set_task_id("16")
     print('\n ------ ------ ----- context initial ------ ------ ----- \n')
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), context.config)
+    mkdir_directory(Path(context.model_inputs_folder))
+    mkdir_directory(Path(context.model_outputs_folder))
+    mkdir_directory(Path(context.history_model_folder))
     if context.is_prod():
         print('\n ------ ------ ----- data preparation ------ ------ ----- \n')
         # 2. remove inputs and outputs

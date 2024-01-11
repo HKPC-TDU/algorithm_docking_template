@@ -10,7 +10,7 @@ from context import PredictContext
 from predict import ModelPredict
 from store import Repository
 from pathlib import Path
-from utils.file_utils import remove_directory
+from utils.file_utils import remove_directory, mkdir_directory
 from datetime import datetime
 
 
@@ -34,6 +34,9 @@ class PredictorServicer(prediction_service.PredictorServicer):
             data_info = request.document.split(contact)
             bucket = data_info[0]
             path = data_info[1]
+            mkdir_directory(Path(self.context.inputs_folder))
+            mkdir_directory(Path(self.context.outputs_folder))
+            mkdir_directory(Path(self.context.model_folder))
             if self.context.is_prod():
                 # 1. remove history request
                 remove_directory(Path(self.context.inputs_folder))
