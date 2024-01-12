@@ -45,9 +45,15 @@ def main():
         interceptor.starting()
     # 4. model training
     print('\n ------ ------ ----- training ------ ------ ----- \n')
-    model = Model(context.model_inputs_folder, context.model_outputs_folder, context.history_model_folder)
-    t_result = model.train()
-    if t_result and context.is_prod():
+    try:
+        model = Model(context.model_inputs_folder, context.model_outputs_folder, context.history_model_folder)
+        model.train()
+    except Exception as err:
+        if context.is_prod():
+            interceptor.failure()
+        raise err
+
+    if context.is_prod():
         print('\n ------ ------ ----- result persistence ------ ------ ----- \n')
         # 5. store model
         repository.upload_local_folder_to_minio(context.model_outputs_folder, context.get_model_bucket(),
@@ -57,8 +63,7 @@ def main():
         # 6. create artifact
         artifact = interceptor.success()
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "upload model files as artifact '{}'".format(artifact.name))
-    elif not t_result:
-        interceptor.failure()
+
     print('\n ------ ------ ----- FINISHED ! ------ ------ -----\n ')
 
 

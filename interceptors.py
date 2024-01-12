@@ -15,7 +15,7 @@ class TrainingInterceptor:
         self.interceptor.log_run_start()
 
     def failure(self):
-        self.interceptor.log_run_end(True, 'fail to complete training job.')
+        self.interceptor.log_run_end(False, 'fail to complete training job.')
 
     def success(self):
         self.interceptor.log_run_end(True, 'success to complete training job.')

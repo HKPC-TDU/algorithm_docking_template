@@ -14,6 +14,7 @@ def run_script(command):
             script_name = "server"
             # subprocess.run(["python", "server.py"], check=True)
         if script_name != "":
+            print(f"run command {command}")
             module = importlib.import_module(script_name)
             module.main()
         else:

@@ -7,7 +7,6 @@ class Model:
         self.inputs_folder = inputs_folder
         self.outputs_folder = outputs_folder
         self.history_model_folder = history_model_folder
-        self.result = True
 
     def train(self):
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'load dataset from {0}'.format(self.inputs_folder))
@@ -17,4 +16,3 @@ class Model:
         # codes of algorithm
 
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'save model in {0}'.format(self.outputs_folder))
-        return self.result

@@ -15,7 +15,6 @@ class Model:
         self.inputs_folder = inputs_folder
         self.outputs_folder = outputs_folder
         self.history_model_folder = history_model_folder
-        self.result = True
 
     def train(self):
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'load dataset from {0}'.format(self.inputs_folder))
@@ -25,7 +24,6 @@ class Model:
         # codes of algorithm
 
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'save model in {0}'.format(self.outputs_folder))
-        return self.result
 ```
 self.inputs_folder 对应文件夹train_inputs
 
@@ -107,3 +105,13 @@ python3 test.py
 conda run python test.py
 ```
 验证预测结果输出到responses
+
+## 4. 上线部署
+
+### 4.1 打包镜像
+```commandline
+sh build-image.sh
+```
+### 4.2 在平台上添加算法记录
+![plat_add_image.png](plat_add_image.png)
+
