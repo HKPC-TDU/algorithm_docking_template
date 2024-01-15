@@ -2,12 +2,22 @@
 通过运行环境的本地文件结构来解耦平台和算法。抽象平台与指定文件夹互操作，作为通用部分；算法通过指定文件夹读取数据并保存输出到指定文件夹。
 ## 1. 文件结构
 ![folder_structure.png](folder_structure.png)
-## 2. 算法开发
+## 2. 代码生成及管理
+（1）在github上点击Create a new repository使用该template创建算法代码仓库
 
-### 2.1 算法代码
-默认训练成功，可以添加熟练失败的逻辑
+![template_locate.png](template_locate.png)
 
-path: train.py
+（2）建议使用算法名称创建repository
+
+![repository_create.png](repository_create.png)
+
+## 3. 算法代码集成
+把创建好的代码仓库clone到本地，就可以进行算法代码集成了。
+
+算法只需要自定义训练服务和预测服务的具体逻辑两处代码。
+### 3.1 自定义算法训练
+
+代码文件路劲: train.py
 ```train.py
 class Model:
 
@@ -25,38 +35,47 @@ class Model:
 
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'save model in {0}'.format(self.outputs_folder))
 ```
-self.inputs_folder 对应文件夹train_inputs
+类属性注释：
 
-self.outputs_folder 对应文件夹train_outputs
+- self.inputs_folder ：对应文件夹train_inputs，训练数据路劲。
 
-self.history_model_folder 对应文件夹model_data
+- self.outputs_folder ：对应文件夹train_outputs，模型输出路劲。
 
-### 2.2 本地调试模型训练
+- self.history_model_folder ：对应文件夹model_data，如果模型需要预训练，上一次的模型训练结果可以在该文件夹读取，文件名与模型输出的一致。
+
+### 3.1.1 本地调试模型训练
 （1）安装依赖包
 ```commandline
 # VirtualEnv
 pip install -r requirments.txt
 # Conda
+conda create --name template
+conda activate template
 conda install minio grpcio grpcio-health-checking
 ```
 （2）数据准备
 
-Copy训练数据到train_inputs文件夹
+如果要解除平台依赖，调试时可设置环境变量（见第（3）步）。 Copy训练数据到train_inputs文件夹
 
 （3）启动训练服务
+
+通过环境变量ENV区分运行环境
+- 当ENV="DEV"，解除对平台的依赖，直接从train_inputs文件夹读取数据，可以人工COPY数据进来
+- 当ENV="PROD"，直接与平台交互，先发平台数据下载到train_inputs文件夹
 ```commandline
 # VirtualEnv
-python3 train_entrance.py
+ENV="DEV" python3 train_entrance.py
+ENV="PROD" python3 train_entrance.py
 # Conda
-conda run python train_entrance.py
+conda run ENV="DEV" python train_entrance.py
+conda run ENV="PROD" python train_entrance.py
 ```
 （4）验证
-检查模型输出到train_outputs文件夹
 
-## 3. 预测服务开发
+检查输出到train_outputs文件夹的模型训练结果是否符合预期，如果是，算法训练编码工作就完成了。
 
-### 3.1 预测服务代码
-path: predict.py
+### 3.2 自定义预测服务
+代码文件路劲: predict.py
 ```predict.py
 class ModelPredict:
 
@@ -74,13 +93,16 @@ class ModelPredict:
 
         print('save result in {0}'.format(self.outputs_folder))
 ```
-self.inputs_folder 对应文件夹requests
+类属性注释：
 
-self.outputs_folder 对应文件夹response
+- self.model_folder ：对应文件夹model_data，这里存放的是模型训练结果，如果训练成功后的模型参数等。
 
-self.model_folder 对应文件夹model_data
+- self.inputs_folder ：对应文件夹requests，请求数据路劲，请遍历文件夹获取请求数据。
 
-### 3.2 本地调试预测服务
+- self.outputs_folder ：对应文件夹response，预测结果路劲，预测结束后，需要把预测结果文件保存到该文件夹。
+如果输出的是图片，直接保存图片文件；如果是text信息，可保存为文本文件。
+
+### 3.2.1 本地调试预测服务
 （1）安装依赖包
 ```commandline
 # VirtualEnv
@@ -88,25 +110,37 @@ pip install -r requirments.txt
 # Conda
 conda install minio grpcio grpcio-health-checking
 ```
-（2）启动预测服务
+（2）数据准备
+
+如果要解除平台依赖，调试时可设置环境变量（见第（3）步）。 Copy训练数据到model_data和requests文件夹
+
+（3）启动预测服务
+
+通过环境变量ENV区分运行环境
+- 当ENV="DEV"，解除对平台的依赖，直接从model_data和requests文件夹读取数据，可以人工COPY数据进来
+- 当ENV="PROD"，直接与平台交互，先发平台数据下载到model_data和requests文件夹
 ```commandline
 # VirtualEnv
-python3 server.py
+ENV="DEV" python3 server.py
+ENV="PROD" python3 server.py
 # Conda
-conda run python server.py
+conda run ENV="DEV" python server.py
+conda run ENV="PROD" python server.py
 ```
-（3）预测服务测试
+（4）预测服务测试
 
-Copy预测数据到requests文件夹
+执行测试代码
 ```commandline
 # VirtualEnv
 python3 test.py
 # Conda
 conda run python test.py
 ```
-验证预测结果输出到responses
+验证输出到responses的预测结果是否符合预期，如果是，预测服务编码工作就完成了
 
 ## 4. 上线部署
+
+该部分工作可以交给平台运维人员完成
 
 ### 4.1 打包镜像
 ```commandline
