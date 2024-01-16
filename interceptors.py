@@ -19,5 +19,5 @@ class TrainingInterceptor:
 
     def success(self):
         self.interceptor.log_run_end(True, 'success to complete training job.')
-        return self.interceptor.create_artifact(self.context.model_bucket, self.context.model_path,
+        return self.interceptor.create_artifact(self.context.get_model_bucket(), self.context.get_model_path(),
                                                 self.context.algorithm_name)
