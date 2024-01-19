@@ -11,6 +11,9 @@ class TrainingConfig:
             return int(variable)
 
     def __str__(self) -> str:
+        if not "PROD".__eq__(self.ENV.upper()):
+            return "model training settings"
+
         results = [
             "'{}' training settings".format(self.MODEL_NAME),
             "\nbackend service settings:",
@@ -82,6 +85,9 @@ class TrainingConfig:
 class PredictConfig:
 
     def __str__(self) -> str:
+        if not "PROD".__eq__(self.ENV.upper()):
+            return "predict service settings"
+
         results = [
             "predict service settings",
             "{}={}".format("ENV", self.ENV),
@@ -91,6 +97,7 @@ class PredictConfig:
             "{}={}".format("MODEL_BUCKET", self.MODEL_BUCKET),
             "{}={}".format("MODEL_PATH", self.MODEL_PATH),
         ]
+
         return "\n".join(results)
 
     def __init__(self):
