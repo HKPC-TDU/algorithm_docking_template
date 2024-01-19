@@ -13,6 +13,8 @@ def run_script(command):
         elif command == "predict":
             script_name = "server"
             # subprocess.run(["python", "server.py"], check=True)
+        elif command == "test":
+            script_name = "test"
         if script_name != "":
             print(f"run command {command}")
             module = importlib.import_module(script_name)
