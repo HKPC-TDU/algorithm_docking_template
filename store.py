@@ -26,12 +26,15 @@ class Repository:
             # hidden files (files starting with .) will not be found when use glob.glob
             for local_file in glob.glob(local_path + '/**'):
                 local_file = local_file.replace(os.sep, "/")
-                relative_path = os.path.dirname(local_file).replace(local_path, "")
+                dir_path = local_file if os.path.isdir(local_file) else os.path.dirname(local_file)
+                relative_path = dir_path.replace(local_path, "")
                 if relative_path == "":
                     self.upload_local_folder_to_minio(local_file, bucket_name, minio_path)
                 else:
+                    if relative_path.startswith("/"):
+                        relative_path = relative_path.lstrip("/")
                     self.upload_local_folder_to_minio(
-                        local_file, bucket_name, minio_path + "/" + relative_path)
+                        local_file, bucket_name, os.path.join(minio_path, relative_path))
         else:
             remote_path = os.path.join(minio_path, os.path.basename(local_path))
             self.client.fput_object(bucket_name, remote_path, local_path)
