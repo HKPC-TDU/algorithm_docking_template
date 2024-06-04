@@ -43,12 +43,12 @@ class PredictorServicer(prediction_service.PredictorServicer):
                 remove_directory(Path(self.context.outputs_folder))
                 print(f'remove history result in {self.context.outputs_folder}')
                 # 2 download current request
-                self.repository.download_input_paths(bucket, path, self.context.inputs_folder)
+                inputs_path, minio_folder = self.repository.download_input_paths(bucket, path, self.context.inputs_folder)
                 print(f'download request from {bucket}/{path}')
                 # 3. predict by model
                 self.predict_service.predict()
                 # 4. upload result to minio
-                minio_path = f'{path}/outputs'
+                minio_path = f'{minio_folder}/outputs'
                 self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_folder, bucket_name=bucket,
                                                              minio_path=minio_path)
                 print(f'upload result to {bucket}/{minio_path}')
