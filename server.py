@@ -29,7 +29,8 @@ class PredictorServicer(prediction_service.PredictorServicer):
 
     def PredictorPredict(self, request, context: ServicerContext):
         try:
-            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'request to predict')
+            now = datetime.now()
+            print(now.strftime("%Y-%m-%d %H:%M:%S"), 'request to predict')
             mkdir_directory(Path(self.context.inputs_folder))
             mkdir_directory(Path(self.context.outputs_folder))
             if self.context.is_prod():
@@ -48,7 +49,7 @@ class PredictorServicer(prediction_service.PredictorServicer):
                 # 3. predict by model
                 self.predict_service.predict()
                 # 4. upload result to minio
-                minio_path = f'{minio_folder}/outputs'
+                minio_path = f'{minio_folder}/outputs/{now.strftime("%Y%m%d%H%M%S%f")}'
                 self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_folder, bucket_name=bucket,
                                                              minio_path=minio_path)
                 print(f'upload result to {bucket}/{minio_path}')
