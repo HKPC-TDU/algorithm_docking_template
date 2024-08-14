@@ -10,6 +10,7 @@ def remove_directory(start_directory: Path):
                 path.unlink()
         else:
             remove_directory(path)
+            path.rmdir()
 
 
 def mkdir_directory(directory: Path):

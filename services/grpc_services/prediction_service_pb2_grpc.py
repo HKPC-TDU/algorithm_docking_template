@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import prediction_service_pb2 as prediction__service__pb2
+import services.grpc_services.prediction_service_pb2 as prediction__service__pb2
 
 
 class PredictionServiceStub(object):

@@ -1,6 +1,5 @@
 import grpc
-import prediction_service_pb2
-import prediction_service_pb2_grpc
+from services.grpc_services import prediction_service_pb2_grpc, prediction_service_pb2
 
 channel = grpc.insecure_channel("localhost:51001")
 stub = prediction_service_pb2_grpc.PredictorStub(channel)

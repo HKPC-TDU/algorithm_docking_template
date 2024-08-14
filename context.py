@@ -14,7 +14,7 @@ class TrainingContext:
         self.config.TRAINING_DATA_PATH = path
 
     def set_task_id(self, task_id):
-        self.config.JOB_ID = task_id
+        self.config.TASK_ID = task_id
 
     def is_prod(self):
         return self.config.ENV and "PROD".__eq__(self.config.ENV.upper())
@@ -24,10 +24,10 @@ class TrainingContext:
 
     def get_model_path(self):
         # todo: how to get history task
-        return f'run_{self.config.JOB_ID}'
+        return f'run_{self.config.TASK_ID}'
 
     def get_history_model_path(self):
-        return f'run_{self.config.JOB_ID}'
+        return f'run_{self.config.TASK_ID}'
 
 
 class PredictContext:

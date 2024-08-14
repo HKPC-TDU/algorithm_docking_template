@@ -1,7 +1,7 @@
 # algorithm_docking_template
 通过运行环境的本地文件结构来解耦平台和算法。抽象平台与指定文件夹互操作，作为通用部分；算法通过指定文件夹读取数据并保存输出到指定文件夹。
 ## 1. 文件结构
-![folder_structure.png](folder_structure.png)
+![folder_structure.png](docs/folder_structure.png)
 ## 2. 软件安装
 - [安装git](https://git-scm.com/downloads)
 - [安装Docker](https://docs.docker.com/engine/install/)
@@ -12,11 +12,11 @@
 ## 3. 代码生成及管理
 （1）在github上点击Create a new repository使用该template创建算法代码仓库
 
-![template_locate.png](template_locate.png)
+![template_locate.png](docs/template_locate.png)
 
 （2）建议使用算法名称创建repository
 
-![repository_create.png](repository_create.png)
+![repository_create.png](docs/repository_create.png)
 
 github-path=https&#58;//github.com/${Owner}/${Repository&nbsp;name}
 

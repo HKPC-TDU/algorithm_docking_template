@@ -1,17 +1,16 @@
 from concurrent import futures
 import grpc
 from grpc import ServicerContext
-import os
-import prediction_service_pb2
-import prediction_service_pb2_grpc as prediction_service
+from services.grpc_services import prediction_service_pb2_grpc as prediction_service, prediction_service_pb2
 from grpc_health.v1 import health_pb2_grpc, health
 
 from context import PredictContext
 from predict import ModelPredict
-from store import Repository
+from services.store import MinIORepository, DocumentService
 from pathlib import Path
 from utils.file_utils import remove_directory, mkdir_directory
 from datetime import datetime
+from core.settings import COMPUTATION_ENGINE_LOCAL
 
 
 class ModelLoadingError(Exception):
@@ -44,14 +43,14 @@ class PredictorServicer(prediction_service.PredictorServicer):
                 remove_directory(Path(self.context.outputs_folder))
                 print(f'remove history result in {self.context.outputs_folder}')
                 # 2 download current request
-                inputs_path, minio_folder = self.repository.download_input_paths(bucket, path, self.context.inputs_folder)
+                inputs_path, minio_folder = self.repository.download_inputs(bucket, path, self.context.inputs_folder)
                 print(f'download request from {bucket}/{path}')
                 # 3. predict by model
                 self.predict_service.predict()
                 # 4. upload result to minio
                 minio_path = f'{minio_folder}/outputs/{now.strftime("%Y%m%d%H%M%S%f")}'
-                self.repository.upload_local_folder_to_minio(local_path=self.context.outputs_folder, bucket_name=bucket,
-                                                             minio_path=minio_path)
+                self.repository.upload_outputs(local_path=self.context.outputs_folder, bucket_name=bucket,
+                                               minio_path=minio_path)
                 print(f'upload result to {bucket}/{minio_path}')
                 print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'finish\n')
                 return prediction_service_pb2.PredictorPredictResponse(
@@ -70,15 +69,22 @@ def main():
     context = PredictContext()
     print('\n ------ ------ ----- context initial ------ ------ ----- \n')
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), context.config)
-    repository = Repository(context.config.MINIO_SERVER, context.config.MINIO_SERVER_ACCESS_KEY,
-                            context.config.MINIO_SERVER_SECRET_KEY)
+    config = context.config
+    if COMPUTATION_ENGINE_LOCAL.__eq__(config.COMPUTATION_ENGINE_TYPE):
+        repository = MinIORepository(config.MINIO_SERVER, config.MINIO_SERVER_ACCESS_KEY,
+                                     config.MINIO_SERVER_SECRET_KEY)
+    else:
+        repository = DocumentService(auth_service_host=config.AI_PLAT_API_AUTH_SERVICE,
+                                     user=config.AI_PLAT_USER_NAME, password=config.AI_PLAT_USER_PASSWORD,
+                                     client_id=config.AI_PLAT_CLIENT_ID, client_secret=config.AI_PLAT_CLIENT_SECRET,
+                                     data_service_host=config.AI_PLAT_API_DATA_SERVICE)
     # download model
     print('\n ------ ------ ----- model loading ------ ------ ----- \n')
     mkdir_directory(Path(context.model_folder))
     if context.is_prod() and context.model_bucket and context.model_path:
         remove_directory(Path(context.model_folder))
         print(f'remove history result in {context.model_folder}')
-        repository.download_input_paths(context.model_bucket, context.model_path, context.model_folder)
+        repository.download_inputs(context.model_bucket, context.model_path, context.model_folder)
         print(f'download model from {context.model_bucket}/{context.model_path}')
     print(f'load model in {context.model_folder}')
     print('\n ------ ------ ----- serving ------ ------ ----- \n')

@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import metadata_store_pb2 as metadata__store__pb2
+import services.grpc_services.metadata_store_pb2 as metadata__store__pb2
 
 
 class MetadataStoreServiceStub(object):
