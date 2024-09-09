@@ -42,3 +42,6 @@ class PredictContext:
 
     def is_prod(self):
         return self.config.ENV and "PROD".__eq__(self.config.ENV.upper())
+
+    def is_pretrain_model(self):
+        return self.config.ENV and "PRE_TRAIN".__eq__(self.config.ENV.upper())

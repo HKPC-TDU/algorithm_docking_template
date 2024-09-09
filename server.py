@@ -32,7 +32,7 @@ class PredictorServicer(prediction_service.PredictorServicer):
             print(now.strftime("%Y-%m-%d %H:%M:%S"), 'request to predict')
             mkdir_directory(Path(self.context.inputs_folder))
             mkdir_directory(Path(self.context.outputs_folder))
-            if self.context.is_prod():
+            if self.context.is_prod() or self.context.is_pretrain_model():
                 contact = "###"
                 data_info = request.document.split(contact)
                 bucket = data_info[0]
