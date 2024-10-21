@@ -12,19 +12,41 @@ class PredictionServiceStub(object):
         """Constructor.
 
         Args:
-            channel: A grpc_services.Channel.
+            channel: A grpc.Channel.
         """
+        self.deployPredictor = channel.unary_unary(
+                '/prediction.PredictionService/deployPredictor',
+                request_serializer=prediction__service__pb2.InferenceServiceRequest.SerializeToString,
+                response_deserializer=prediction__service__pb2.InferenceServiceResponse.FromString,
+                )
         self.Predict = channel.unary_unary(
                 '/prediction.PredictionService/Predict',
                 request_serializer=prediction__service__pb2.PredictRequest.SerializeToString,
                 response_deserializer=prediction__service__pb2.PredictResponse.FromString,
+                )
+        self.registerContainer = channel.unary_unary(
+                '/prediction.PredictionService/registerContainer',
+                request_serializer=prediction__service__pb2.RegisterInferenceContainerRequest.SerializeToString,
+                response_deserializer=prediction__service__pb2.InferenceServiceResponse.FromString,
                 )
 
 
 class PredictionServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
+    def deployPredictor(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Predict(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def registerContainer(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -33,10 +55,20 @@ class PredictionServiceServicer(object):
 
 def add_PredictionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'deployPredictor': grpc.unary_unary_rpc_method_handler(
+                    servicer.deployPredictor,
+                    request_deserializer=prediction__service__pb2.InferenceServiceRequest.FromString,
+                    response_serializer=prediction__service__pb2.InferenceServiceResponse.SerializeToString,
+            ),
             'Predict': grpc.unary_unary_rpc_method_handler(
                     servicer.Predict,
                     request_deserializer=prediction__service__pb2.PredictRequest.FromString,
                     response_serializer=prediction__service__pb2.PredictResponse.SerializeToString,
+            ),
+            'registerContainer': grpc.unary_unary_rpc_method_handler(
+                    servicer.registerContainer,
+                    request_deserializer=prediction__service__pb2.RegisterInferenceContainerRequest.FromString,
+                    response_serializer=prediction__service__pb2.InferenceServiceResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -47,6 +79,23 @@ def add_PredictionServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class PredictionService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def deployPredictor(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/prediction.PredictionService/deployPredictor',
+            prediction__service__pb2.InferenceServiceRequest.SerializeToString,
+            prediction__service__pb2.InferenceServiceResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def Predict(request,
@@ -65,6 +114,23 @@ class PredictionService(object):
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
+    @staticmethod
+    def registerContainer(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/prediction.PredictionService/registerContainer',
+            prediction__service__pb2.RegisterInferenceContainerRequest.SerializeToString,
+            prediction__service__pb2.InferenceServiceResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
 
 class PredictorStub(object):
     """Missing associated documentation comment in .proto file."""
@@ -73,7 +139,7 @@ class PredictorStub(object):
         """Constructor.
 
         Args:
-            channel: A grpc_services.Channel.
+            channel: A grpc.Channel.
         """
         self.PredictorPredict = channel.unary_unary(
                 '/prediction.Predictor/PredictorPredict',

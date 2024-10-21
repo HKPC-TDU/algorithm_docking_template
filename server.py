@@ -30,6 +30,7 @@ class PredictorServicer(prediction_service.PredictorServicer):
         try:
             now = datetime.now()
             print(now.strftime("%Y-%m-%d %H:%M:%S"), 'request to predict')
+            print("request:", request)
             mkdir_directory(Path(self.context.inputs_folder))
             mkdir_directory(Path(self.context.outputs_folder))
             if self.context.is_prod() or self.context.is_pretrain_model():
@@ -46,7 +47,7 @@ class PredictorServicer(prediction_service.PredictorServicer):
                 inputs_path, minio_folder = self.repository.download_inputs(bucket, path, self.context.inputs_folder)
                 print(f'download request from {bucket}/{path}')
                 # 3. predict by model
-                self.predict_service.predict()
+                self.predict_service.predict(request.args)
                 # 4. upload result to minio
                 minio_path = f'{minio_folder}/outputs/{now.strftime("%Y%m%d%H%M%S%f")}'
                 self.repository.upload_outputs(local_path=self.context.outputs_folder, bucket_name=bucket,
@@ -56,7 +57,7 @@ class PredictorServicer(prediction_service.PredictorServicer):
                 return prediction_service_pb2.PredictorPredictResponse(
                     response=f'{bucket}{contact}{minio_path}')
             # develop environment
-            self.predict_service.predict()
+            self.predict_service.predict(request.args)
             print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'finish\n')
             return prediction_service_pb2.PredictorPredictResponse(
                 response=f'success to store result in {self.context.outputs_folder}')
