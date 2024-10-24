@@ -26,7 +26,7 @@ def main():
         # 2. remove inputs and outputs
         remove_directory(Path(context.model_inputs_folder))
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history inputs in {context.model_inputs_folder}')
-        # remove_directory(Path(context.model_outputs_folder))
+        remove_directory(Path(context.model_outputs_folder))
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history outputs in {context.model_outputs_folder}')
         remove_directory(Path(context.history_model_folder))
         print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f'remove history model in {context.history_model_folder}')
