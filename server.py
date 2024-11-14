@@ -11,6 +11,9 @@ from pathlib import Path
 from utils.file_utils import remove_directory, mkdir_directory
 from datetime import datetime
 from core.settings import COMPUTATION_ENGINE_LOCAL
+import os
+import time
+import mimetypes
 
 
 class ModelLoadingError(Exception):
@@ -25,6 +28,52 @@ class PredictorServicer(prediction_service.PredictorServicer):
         self.context = context
         self.repository = repository
         self.predict_service = predict_service
+
+    def PredictStream(self, request_iterator, context):
+        try:
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'request to predict')
+
+            for request in request_iterator:
+                start_time = time.time()
+                mkdir_directory(Path(self.context.inputs_folder))
+                mkdir_directory(Path(self.context.outputs_folder))
+                # 1. remove history request
+                remove_directory(Path(self.context.inputs_folder))
+                print(f'remove history request in {self.context.inputs_folder}')
+                # if self.context.is_prod() or self.context.is_pretrain_model():
+                remove_directory(Path(self.context.outputs_folder))
+                print(f'remove history result in {self.context.outputs_folder}')
+                if request.files:
+                    args = {
+                        "IS_OUTPUT_LABELS": 'true',
+                        "IS_OUTPUT_BOUNDBOX": 'false'
+                    }
+                    for file in request.files:
+                        # Process file info
+                        print(f"Received file: {file.filename}")
+                        input_file = os.path.join(self.context.inputs_folder, file.filename)
+                        with open(input_file, 'wb') as file_in:
+                            file_in.write(file.content)
+                    self.predict_service.predict(args)
+                    output_labels_file = self.predict_service.get_output_json_path()
+                    with open(output_labels_file, 'rb') as file_out:
+                        binary_data = file_out.read()
+
+                    file_name = os.path.basename(output_labels_file)
+                    mime_type, _ = mimetypes.guess_type(output_labels_file)
+                    size = os.path.getsize(output_labels_file)
+                    print('request cost {}'.format(str(time.time() - start_time)))
+                    yield prediction_service_pb2.PredictStreamResponse(
+                        file=prediction_service_pb2.StreamFile(
+                            contentType=mime_type,
+                            filename=file_name,
+                            content=binary_data,
+                            length=size
+                        )
+                    )
+
+        except ModelLoadingError as ex:
+            context.abort(ex.status_code, ex.message)
 
     def PredictorPredict(self, request, context: ServicerContext):
         try:

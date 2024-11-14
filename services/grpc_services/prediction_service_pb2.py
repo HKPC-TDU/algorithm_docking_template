@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18prediction_service.proto\x12\nprediction\"1\n\x0ePredictRequest\x12\r\n\x05runId\x18\x03 \x01(\t\x12\x10\n\x08\x64ocument\x18\x04 \x01(\t\"#\n\x0fPredictResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"\xa4\x01\n\x17PredictorPredictRequest\x12\r\n\x05runId\x18\x01 \x01(\t\x12\x10\n\x08\x64ocument\x18\x02 \x01(\t\x12;\n\x04\x61rgs\x18\x03 \x03(\x0b\x32-.prediction.PredictorPredictRequest.ArgsEntry\x1a+\n\tArgsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\",\n\x18PredictorPredictResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"\x9d\x01\n\x17InferenceServiceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nartifactId\x18\x02 \x01(\t\x12\x14\n\x0cstartupImage\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12\x0c\n\x04gpus\x18\x05 \x01(\x05\x12\x14\n\x0cgpuDeviceIds\x18\x06 \x01(\t\x12\x11\n\tgpuDriver\x18\x07 \x01(\t\"\xfc\x01\n!RegisterInferenceContainerRequest\x12\x34\n\x07startup\x18\x01 \x01(\x0b\x32#.prediction.InferenceServiceRequest\x12\x13\n\x0b\x63ontainerId\x18\x02 \x01(\t\x12\x15\n\rcontainerName\x18\x03 \x01(\t\x12G\n\x05ports\x18\x04 \x03(\x0b\x32\x38.prediction.RegisterInferenceContainerRequest.PortsEntry\x1a,\n\nPortsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\";\n\x18InferenceServiceResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ontainerId\x18\x02 \x01(\t2\x9f\x02\n\x11PredictionService\x12\\\n\x0f\x64\x65ployPredictor\x12#.prediction.InferenceServiceRequest\x1a$.prediction.InferenceServiceResponse\x12\x42\n\x07Predict\x12\x1a.prediction.PredictRequest\x1a\x1b.prediction.PredictResponse\x12h\n\x11registerContainer\x12-.prediction.RegisterInferenceContainerRequest\x1a$.prediction.InferenceServiceResponse2j\n\tPredictor\x12]\n\x10PredictorPredict\x12#.prediction.PredictorPredictRequest\x1a$.prediction.PredictorPredictResponseB8\n\x1corg.hkpc.platform.predictionB\x16PredictionServiceProtoP\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18prediction_service.proto\x12\nprediction\"\x92\x01\n\x0ePredictRequest\x12\r\n\x05runId\x18\x03 \x01(\t\x12\x10\n\x08\x64ocument\x18\x04 \x01(\t\x12\x32\n\x04\x61rgs\x18\x05 \x03(\x0b\x32$.prediction.PredictRequest.ArgsEntry\x1a+\n\tArgsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"#\n\x0fPredictResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"T\n\nStreamFile\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x13\n\x0b\x63ontentType\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\x0c\x12\x0e\n\x06length\x18\x04 \x01(\x03\"\xb8\x01\n\x14PredictStreamRequest\x12\x12\n\nartifactId\x18\x01 \x01(\x05\x12%\n\x05\x66iles\x18\x02 \x03(\x0b\x32\x16.prediction.StreamFile\x12\x38\n\x04\x61rgs\x18\x03 \x03(\x0b\x32*.prediction.PredictStreamRequest.ArgsEntry\x1a+\n\tArgsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"=\n\x15PredictStreamResponse\x12$\n\x04\x66ile\x18\x01 \x01(\x0b\x32\x16.prediction.StreamFile\"\xa4\x01\n\x17PredictorPredictRequest\x12\r\n\x05runId\x18\x01 \x01(\t\x12\x10\n\x08\x64ocument\x18\x02 \x01(\t\x12;\n\x04\x61rgs\x18\x03 \x03(\x0b\x32-.prediction.PredictorPredictRequest.ArgsEntry\x1a+\n\tArgsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\",\n\x18PredictorPredictResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"\x9d\x01\n\x17InferenceServiceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nartifactId\x18\x02 \x01(\t\x12\x14\n\x0cstartupImage\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12\x0c\n\x04gpus\x18\x05 \x01(\x05\x12\x14\n\x0cgpuDeviceIds\x18\x06 \x01(\t\x12\x11\n\tgpuDriver\x18\x07 \x01(\t\"\xfc\x01\n!RegisterInferenceContainerRequest\x12\x34\n\x07startup\x18\x01 \x01(\x0b\x32#.prediction.InferenceServiceRequest\x12\x13\n\x0b\x63ontainerId\x18\x02 \x01(\t\x12\x15\n\rcontainerName\x18\x03 \x01(\t\x12G\n\x05ports\x18\x04 \x03(\x0b\x32\x38.prediction.RegisterInferenceContainerRequest.PortsEntry\x1a,\n\nPortsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\";\n\x18InferenceServiceResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ontainerId\x18\x02 \x01(\t2\x9f\x02\n\x11PredictionService\x12\\\n\x0f\x64\x65ployPredictor\x12#.prediction.InferenceServiceRequest\x1a$.prediction.InferenceServiceResponse\x12\x42\n\x07Predict\x12\x1a.prediction.PredictRequest\x1a\x1b.prediction.PredictResponse\x12h\n\x11registerContainer\x12-.prediction.RegisterInferenceContainerRequest\x1a$.prediction.InferenceServiceResponse2\xc4\x01\n\tPredictor\x12]\n\x10PredictorPredict\x12#.prediction.PredictorPredictRequest\x1a$.prediction.PredictorPredictResponse\x12X\n\rPredictStream\x12 .prediction.PredictStreamRequest\x1a!.prediction.PredictStreamResponse(\x01\x30\x01\x42\x38\n\x1corg.hkpc.platform.predictionB\x16PredictionServiceProtoP\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,30 +22,44 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'prediction_service_pb2', _g
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
   _globals['DESCRIPTOR']._serialized_options = b'\n\034org.hkpc.platform.predictionB\026PredictionServiceProtoP\001'
+  _globals['_PREDICTREQUEST_ARGSENTRY']._options = None
+  _globals['_PREDICTREQUEST_ARGSENTRY']._serialized_options = b'8\001'
+  _globals['_PREDICTSTREAMREQUEST_ARGSENTRY']._options = None
+  _globals['_PREDICTSTREAMREQUEST_ARGSENTRY']._serialized_options = b'8\001'
   _globals['_PREDICTORPREDICTREQUEST_ARGSENTRY']._options = None
   _globals['_PREDICTORPREDICTREQUEST_ARGSENTRY']._serialized_options = b'8\001'
   _globals['_REGISTERINFERENCECONTAINERREQUEST_PORTSENTRY']._options = None
   _globals['_REGISTERINFERENCECONTAINERREQUEST_PORTSENTRY']._serialized_options = b'8\001'
-  _globals['_PREDICTREQUEST']._serialized_start=40
-  _globals['_PREDICTREQUEST']._serialized_end=89
-  _globals['_PREDICTRESPONSE']._serialized_start=91
-  _globals['_PREDICTRESPONSE']._serialized_end=126
-  _globals['_PREDICTORPREDICTREQUEST']._serialized_start=129
-  _globals['_PREDICTORPREDICTREQUEST']._serialized_end=293
-  _globals['_PREDICTORPREDICTREQUEST_ARGSENTRY']._serialized_start=250
-  _globals['_PREDICTORPREDICTREQUEST_ARGSENTRY']._serialized_end=293
-  _globals['_PREDICTORPREDICTRESPONSE']._serialized_start=295
-  _globals['_PREDICTORPREDICTRESPONSE']._serialized_end=339
-  _globals['_INFERENCESERVICEREQUEST']._serialized_start=342
-  _globals['_INFERENCESERVICEREQUEST']._serialized_end=499
-  _globals['_REGISTERINFERENCECONTAINERREQUEST']._serialized_start=502
-  _globals['_REGISTERINFERENCECONTAINERREQUEST']._serialized_end=754
-  _globals['_REGISTERINFERENCECONTAINERREQUEST_PORTSENTRY']._serialized_start=710
-  _globals['_REGISTERINFERENCECONTAINERREQUEST_PORTSENTRY']._serialized_end=754
-  _globals['_INFERENCESERVICERESPONSE']._serialized_start=756
-  _globals['_INFERENCESERVICERESPONSE']._serialized_end=815
-  _globals['_PREDICTIONSERVICE']._serialized_start=818
-  _globals['_PREDICTIONSERVICE']._serialized_end=1105
-  _globals['_PREDICTOR']._serialized_start=1107
-  _globals['_PREDICTOR']._serialized_end=1213
+  _globals['_PREDICTREQUEST']._serialized_start=41
+  _globals['_PREDICTREQUEST']._serialized_end=187
+  _globals['_PREDICTREQUEST_ARGSENTRY']._serialized_start=144
+  _globals['_PREDICTREQUEST_ARGSENTRY']._serialized_end=187
+  _globals['_PREDICTRESPONSE']._serialized_start=189
+  _globals['_PREDICTRESPONSE']._serialized_end=224
+  _globals['_STREAMFILE']._serialized_start=226
+  _globals['_STREAMFILE']._serialized_end=310
+  _globals['_PREDICTSTREAMREQUEST']._serialized_start=313
+  _globals['_PREDICTSTREAMREQUEST']._serialized_end=497
+  _globals['_PREDICTSTREAMREQUEST_ARGSENTRY']._serialized_start=144
+  _globals['_PREDICTSTREAMREQUEST_ARGSENTRY']._serialized_end=187
+  _globals['_PREDICTSTREAMRESPONSE']._serialized_start=499
+  _globals['_PREDICTSTREAMRESPONSE']._serialized_end=560
+  _globals['_PREDICTORPREDICTREQUEST']._serialized_start=563
+  _globals['_PREDICTORPREDICTREQUEST']._serialized_end=727
+  _globals['_PREDICTORPREDICTREQUEST_ARGSENTRY']._serialized_start=144
+  _globals['_PREDICTORPREDICTREQUEST_ARGSENTRY']._serialized_end=187
+  _globals['_PREDICTORPREDICTRESPONSE']._serialized_start=729
+  _globals['_PREDICTORPREDICTRESPONSE']._serialized_end=773
+  _globals['_INFERENCESERVICEREQUEST']._serialized_start=776
+  _globals['_INFERENCESERVICEREQUEST']._serialized_end=933
+  _globals['_REGISTERINFERENCECONTAINERREQUEST']._serialized_start=936
+  _globals['_REGISTERINFERENCECONTAINERREQUEST']._serialized_end=1188
+  _globals['_REGISTERINFERENCECONTAINERREQUEST_PORTSENTRY']._serialized_start=1144
+  _globals['_REGISTERINFERENCECONTAINERREQUEST_PORTSENTRY']._serialized_end=1188
+  _globals['_INFERENCESERVICERESPONSE']._serialized_start=1190
+  _globals['_INFERENCESERVICERESPONSE']._serialized_end=1249
+  _globals['_PREDICTIONSERVICE']._serialized_start=1252
+  _globals['_PREDICTIONSERVICE']._serialized_end=1539
+  _globals['_PREDICTOR']._serialized_start=1542
+  _globals['_PREDICTOR']._serialized_end=1738
 # @@protoc_insertion_point(module_scope)

@@ -146,12 +146,23 @@ class PredictorStub(object):
                 request_serializer=prediction__service__pb2.PredictorPredictRequest.SerializeToString,
                 response_deserializer=prediction__service__pb2.PredictorPredictResponse.FromString,
                 )
+        self.PredictStream = channel.stream_stream(
+                '/prediction.Predictor/PredictStream',
+                request_serializer=prediction__service__pb2.PredictStreamRequest.SerializeToString,
+                response_deserializer=prediction__service__pb2.PredictStreamResponse.FromString,
+                )
 
 
 class PredictorServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def PredictorPredict(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PredictStream(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -164,6 +175,11 @@ def add_PredictorServicer_to_server(servicer, server):
                     servicer.PredictorPredict,
                     request_deserializer=prediction__service__pb2.PredictorPredictRequest.FromString,
                     response_serializer=prediction__service__pb2.PredictorPredictResponse.SerializeToString,
+            ),
+            'PredictStream': grpc.stream_stream_rpc_method_handler(
+                    servicer.PredictStream,
+                    request_deserializer=prediction__service__pb2.PredictStreamRequest.FromString,
+                    response_serializer=prediction__service__pb2.PredictStreamResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -189,5 +205,22 @@ class Predictor(object):
         return grpc.experimental.unary_unary(request, target, '/prediction.Predictor/PredictorPredict',
             prediction__service__pb2.PredictorPredictRequest.SerializeToString,
             prediction__service__pb2.PredictorPredictResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def PredictStream(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_stream(request_iterator, target, '/prediction.Predictor/PredictStream',
+            prediction__service__pb2.PredictStreamRequest.SerializeToString,
+            prediction__service__pb2.PredictStreamResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
