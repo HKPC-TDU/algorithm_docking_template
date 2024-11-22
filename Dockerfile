@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 51001
 
-CMD [ "python3", "manage.py"]
+CMD [ "python3" , "-u", "manage.py"]
