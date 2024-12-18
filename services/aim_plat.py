@@ -17,6 +17,10 @@ class UserService:
         self.refresh_token = None
 
     def retrieve_access_token(self, client_id, client_secret):
+        if self.access_token and self.refresh_token:
+            self.refresh_access_token(client_id, client_secret)
+            return
+
         url = f'{self.host}/authorization-center/oauth2/token'
         headers = {
             'Content-Type': 'infra/x-www-form-urlencoded'
@@ -36,7 +40,27 @@ class UserService:
             self.access_token = data['access_token']
             self.refresh_token = data['refresh_token']
         else:
-            print('failed to retrieve data ', response.status_code)
+            print(f'failed to retrieve token, status {response.status_code}, {response.text}', )
+
+    def refresh_access_token(self, client_id, client_secret):
+        url = f'{self.host}/authorization-center/oauth2/token'
+        headers = {
+            'Content-Type': 'infra/x-www-form-urlencoded'
+        }
+        params = {
+            "grant_type": "refresh_token",
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "refresh_token": self.refresh_token,
+        }
+        response = requests.post(url, headers=headers, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            self.token_type = data['token_type']
+            self.access_token = data['access_token']
+            self.refresh_token = data['refresh_token']
+        else:
+            print(f'failed to refresh token, status {response.status_code}, {response.text}', )
 
     def token(self):
         if not self.access_token:
@@ -109,7 +133,7 @@ class DataService:
             data = response.json()
             return data
         else:
-            print('failed to retrieve data ', response.status_code)
+            print(f'failed to upload data, status {response.status_code}, {response.text}')
             return None
 
 
@@ -138,6 +162,6 @@ class MetaService:
             data = response.json()
             return data
         else:
-            print('failed to retrieve data ', response.status_code)
+            print(f'failed to retrieve data, status {response.status_code}, {response.text}')
 
         return None

@@ -1,7 +1,7 @@
 import os
 import sys
 
-COMPUTATION_ENGINE_LOCAL = 'Local'
+COMPUTATION_ENGINE_LOCAL = 'LocalContainer'
 
 
 class Config:
@@ -44,27 +44,34 @@ class TrainingConfig(Config):
             "{}={}".format("MINIO_SERVER_ACCESS_KEY", self.MINIO_SERVER_ACCESS_KEY),
             "{}={}".format("MINIO_SERVER_SECRET_KEY", self.MINIO_SERVER_SECRET_KEY),
             "{}={}".format("MODEL_BUCKET", self.MODEL_BUCKET),
+            "{}={}".format("EPOCHS", self.EPOCHS),
+            "{}={}".format("SAVE_EVERY_EPOCH", self.SAVE_EVERY_EPOCH),
+            "{}={}".format("BATCH_SIZE", self.BATCH_SIZE),
         ]
         return "\n".join(results)
 
     def __init__(self):
         super().__init__()
         ######################## define in the backend services ###########################
-        self.TASK_ID = os.getenv('JOB_ID') or "12"
-        self.ALGORITHM_NAME = os.getenv('ALGORITHM_NAME') or "test-1"
+        self.TASK_ID = os.getenv('JOB_ID') or "100"
+        self.ALGORITHM_NAME = os.getenv('ALGORITHM_NAME') or "algo_few-shot-image-detector"
         self.METADATA_STORE_SERVER = os.getenv('METADATA_STORE_SERVER') or "127.0.0.1:6002"
         self.DATA_MANAGEMENT_SERVER = os.getenv('DATA_MANAGEMENT_SERVER') or "127.0.0.1:6000"
-        self.TRAINING_DATASET_ID = os.getenv('TRAINING_DATASET_ID') or "20"
-        self.TRAINING_DATASET_VERSION_HASH = os.getenv('TRAINING_DATASET_VERSION_HASH') or "hashDg=="
+        self.TRAINING_DATASET_ID = os.getenv('TRAINING_DATASET_ID') or "2"
+        self.TRAINING_DATASET_VERSION_HASH = os.getenv('TRAINING_DATASET_VERSION_HASH') or "hashBA=="
         self.MODEL_BUCKET = os.getenv('MODEL_BUCKET') or "tdu-platform-ms"
-        self.MODEL_NAME = os.getenv('MODEL_NAME') or "test"
+        self.MODEL_NAME = os.getenv('MODEL_NAME') or "task_few-shot-image-detector"
         self.MODEL_VERSION = "1.0"
         # docker: minio:9000, local: 127.0.0.1:9000
         self.MINIO_SERVER = os.getenv('MINIO_SERVER') or "127.0.0.1:9000"
         self.MINIO_SERVER_ACCESS_KEY = os.getenv('MINIO_SERVER_ACCESS_KEY') or "foooo"
         self.MINIO_SERVER_SECRET_KEY = os.getenv('MINIO_SERVER_SECRET_KEY') or "barbarbar"
         self.TRAINING_DATA_BUCKET = os.getenv('TRAINING_DATA_BUCKET') or "tdu-platform-dm"
-        self.TRAINING_DATA_PATH = os.getenv('TRAINING_DATA_PATH') or "datasets/20/versions-snapshots/hashAABQ"
+        self.TRAINING_DATA_PATH = os.getenv('TRAINING_DATA_PATH') or "datasets/2/versions-snapshots/hashBA=="
+        # hyper parameters
+        self.EPOCHS = os.getenv('EPOCHS') or "500"
+        self.SAVE_EVERY_EPOCH = os.getenv('SAVE_EVERY_EPOCH') or "50"
+        self.BATCH_SIZE = os.getenv('BATCH_SIZE') or "10"
 
 
 class PredictConfig(Config):
@@ -93,4 +100,4 @@ class PredictConfig(Config):
         self.MINIO_SERVER_ACCESS_KEY = os.getenv('MINIO_SERVER_ACCESS_KEY') or "foooo"
         self.MINIO_SERVER_SECRET_KEY = os.getenv('MINIO_SERVER_SECRET_KEY') or "barbarbar"
         self.MODEL_BUCKET = os.getenv('MODEL_BUCKET') or "tdu-platform-ms"
-        self.MODEL_PATH = os.getenv('MODEL_PATH') or "artifacts/task-site2"
+        self.MODEL_PATH = os.getenv('MODEL_PATH') or "artifacts/task_few-shot-image-detector"

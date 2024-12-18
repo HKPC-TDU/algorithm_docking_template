@@ -10,8 +10,7 @@ print('\n ------ ------ ----- test ------ ------ ----- \n')
 request_folder = 'tdu-platform-dm###datasets/20/versions-snapshots/hashAABQ'
 result = stub.PredictorPredict(
     prediction_service_pb2.PredictorPredictRequest(
-        document=request_folder,
-        args={"DEBUG": 'True'}
+        document=request_folder
     )
 )
 

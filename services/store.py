@@ -73,4 +73,5 @@ class MinIORepository:
                         local_file, bucket_name, os.path.join(minio_path, relative_path))
         else:
             remote_path = os.path.join(minio_path, os.path.basename(local_path))
+            print(f'upload {local_path} to {bucket_name}, {remote_path}')
             self.client.fput_object(bucket_name, remote_path, local_path)
