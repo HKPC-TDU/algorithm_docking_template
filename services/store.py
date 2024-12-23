@@ -4,6 +4,7 @@ from pathlib import Path
 from minio import Minio
 from services.repository import Repository
 from services.aim_plat import UserService, DataService
+from services.file import FileService
 
 
 class DocumentService(Repository):
@@ -17,7 +18,9 @@ class DocumentService(Repository):
     def download_inputs(self, bucket, path, inputs_path):
         self.user_service.retrieve_access_token(self.client_id, self.client_secret)
         data_service = DataService(self.data_service_host, self.user_service.token())
-        data_service.download(bucket, path, folder_path=inputs_path)
+        file_service = FileService(data_service)
+        file_service.download(bucket, path, inputs_path)
+        # data_service.download(bucket, path, folder_path=inputs_path)
         minio_folder = path
         if Path(path).is_file():
             minio_folder = os.path.dirname(path)
@@ -26,7 +29,9 @@ class DocumentService(Repository):
     def upload_outputs(self, local_path, bucket_name, minio_path):
         self.user_service.retrieve_access_token(self.client_id, self.client_secret)
         data_service = DataService(self.data_service_host, self.user_service.token())
-        data_service.upload(bucket_name, minio_path, local_path)
+        file_service = FileService(data_service)
+        file_service.upload(bucket_name, minio_path, local_path)
+        # data_service.upload(bucket_name, minio_path, local_path)
 
 
 class MinIORepository:

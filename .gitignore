@@ -161,6 +161,7 @@ cython_debug/
 
 train_inputs/*
 train_outputs/*
+train_outputs_backup/*
 requests/*
 responses/*
 model_data/*
